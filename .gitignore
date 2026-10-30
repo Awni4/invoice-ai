@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.vscode/
+.DS_Store
+output/
+# Zugangsdaten und Schlüssel niemals hochladen:
+.env
+# Echte Rechnungen niemals hochladen:
+data/echt_*
