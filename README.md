@@ -31,9 +31,17 @@ Die KI läuft lokal auf dem eigenen Rechner: Die Rechnungsdaten verlassen das Ge
 
 ## Technologien
 
-Python · pypdf · (geplant: Ollama, pandas, openpyxl, BPMN)
+Python · pypdf · Ollama (qwen2.5:3b) · (geplant: pandas, openpyxl, BPMN)
 
 ## Installation & Nutzung
+
+**Voraussetzungen:** Python 3 und [Ollama](https://ollama.com) mit dem Modell `qwen2.5:3b`:
+
+```bash
+ollama pull qwen2.5:3b
+```
+
+**Projekt starten:**
 
 ```bash
 git clone https://github.com/Awni4/invoice-ai.git
@@ -41,6 +49,8 @@ cd invoice-ai
 pip install -r requirements.txt
 python src/main.py
 ```
+
+Ollama muss beim Ausführen im Hintergrund laufen.
 
 ## Daten
 
