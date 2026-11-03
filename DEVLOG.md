@@ -45,3 +45,32 @@ Gültigkeitsbereich von Variablen: Eine innerhalb einer Funktion erstellte Varia
 
 **Nächster Schritt:**
 Die Rechnungsdaten in einem festen, strukturierten Format (JSON) von der KI zurückgeben lassen, damit sie automatisch weiterverarbeitet und geprüft werden können.
+
+## Tag 3 – 03.11.2026
+**Erledigt:**
+Neue Funktion `rechnungsdaten_auslesen`: Das Sprachmodell gibt die Rechnungsdaten (Lieferant, Rechnungsnummer, Datum, IBAN, Netto, USt-Satz, USt-Betrag, Brutto) in einem festen JSON-Format zurück -> Daten liegen als Python-Dictionary vor und können automatisch weiterverarbeitet werden
+
+Anweisung an das Modell um feste Regeln ergänzt (Beträge exakt übernehmen, nichts erfinden, fehlende Angaben als null).
+
+**Gelernt:**
+JSON-Schema als Vorgabe für die Ausgabe des Sprachmodells (`format`); Datentypen im Schema (`string`, `number`) und `null` für fehlende Angaben; `temperature: 0` für möglichst gleichbleibende Antworten; JSON mit `json.loads` in ein Dictionary umwandeln.
+
+Prompt Engineering: Die Formulierung der Anweisung beeinflusst das Ergebnis stark – eine Änderung kann ein Problem beheben und gleichzeitig ein neues erzeugen.
+
+**Problem & Lösung:**
+- Problem: Bei Rechnung 03 gibt das Modell als Bruttobetrag 892,50 € zurück, obwohl auf der Rechnung 942,50 € steht – es rechnet Netto + USt selbst aus, statt den gedruckten Wert zu übernehmen, auch mit ausdrücklicher Anweisung
+- Lösung: Noch offen. Statt weiterer Anweisungen werden die Ergebnisse im nächsten Schritt im Code gegen den Originaltext der Rechnung geprüft.
+
+- Problem: Fehlende Angaben wurden zunächst als leerer Text statt als null zurückgegeben; Lieferant und Datum wurden bei einem Layout nicht erkannt
+- Lösung: Anweisung um Regeln zu Lieferant, Datumsformat und fehlenden Angaben ergänzt.
+
+
+-> Die KI hat einen Rechnungsfehler stillschweigend „korrigiert“. Eine Prüfung von Netto + USt = Brutto auf Basis dieser Werte würde den Fehler nie finden – die falsche Rechnung würde unbemerkt bezahlt.
+
+-> Die verbesserte Anweisung hat die Probleme bei Rechnung 04 behoben, dafür bei Rechnung 05 einen neuen Fehler erzeugt (erfundener Lieferantenname „Dr. Printhaus Rheinblick“ statt „Druckhaus Rheinblick“). Datum und IBAN kommen in wechselnden Formaten zurück.
+
+-> Schlussfolgerung: KI-Ergebnisse dürfen bei Finanzdaten nicht ungeprüft übernommen werden – das kleine Modell ist hilfreich, aber nicht zuverlässig.
+
+
+**Nächster Schritt:**
+Ergebnisse im Code absichern: Datums- und IBAN-Format vereinheitlichen und jeden ausgelesenen Wert mit dem Originaltext der Rechnung abgleichen, damit erfundene oder veränderte Werte automatisch erkannt werden.
