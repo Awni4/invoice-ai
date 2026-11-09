@@ -22,7 +22,8 @@ Die KI läuft lokal auf dem eigenen Rechner: Die Rechnungsdaten verlassen das Ge
 ## Funktionen
 
 - [x] PDF-Rechnungen einlesen und Text extrahieren
-- [ ] Rechnungsdaten mit KI auslesen
+- [x] Rechnungsdaten mit KI auslesen
+- [x] Abgleich der KI-Ergebnisse mit dem Originaltext
 - [ ] Prüfung der Rechenlogik
 - [ ] Prüfung der Pflichtangaben
 - [ ] Prüfung der IBAN

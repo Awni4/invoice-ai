@@ -74,3 +74,28 @@ Prompt Engineering: Die Formulierung der Anweisung beeinflusst das Ergebnis star
 
 **Nächster Schritt:**
 Ergebnisse im Code absichern: Datums- und IBAN-Format vereinheitlichen und jeden ausgelesenen Wert mit dem Originaltext der Rechnung abgleichen, damit erfundene oder veränderte Werte automatisch erkannt werden.
+
+## Tag 4 – 09.11.2026
+**Erledigt:**
+Neue Datei `pruefungen.py`: Datum und IBAN werden im Code vereinheitlicht (Datum immer TT.MM.JJJJ, IBAN ohne Leerzeichen) -> einheitliche Daten unabhängig davon, in welchem Format das Sprachmodell sie zurückgibt
+
+Abgleich mit dem Originaltext: Jeder vom Sprachmodell ausgelesene Wert wird darauf geprüft, ob er tatsächlich in der Rechnung steht -> beide KI-Fehler werden automatisch erkannt (Bruttobetrag bei Rechnung 03, Lieferant bei Rechnung 05), ohne Fehlalarm bei den übrigen Rechnungen
+
+**Gelernt:**
+Reguläre Ausdrücke (`re`) zum Erkennen von Textmustern wie Datumsangaben; Beträge ins deutsche Zahlenformat umwandeln, um sie mit dem Rechnungstext vergleichen zu können; List Comprehension als kompakte Schleife.
+
+Beim Vergleichen müssen beide Seiten gleich behandelt werden (z. B. Leerzeichen auf beiden Seiten entfernen oder auf keiner); jede Prüfung beantwortet genau eine Frage, damit Fehlermeldungen eindeutig bleiben.
+
+**Problem & Lösung:**
+- Problem: Das Sprachmodell liefert Datum und IBAN in wechselnden Formaten (z. B. „2026-09-02“, „Landau, den 09.09.2026“), Anweisungen allein schaffen keine Einheitlichkeit
+- Lösung: Vereinheitlichung im Code statt durch das Modell – Code verhält sich verlässlich, das Modell nicht.
+
+- Problem: Ein fehlender Wert (z. B. Rechnungsnummer bei Rechnung 04) wäre beim Abgleich als „nicht im Dokument gefunden“ gemeldet worden, obwohl das Modell korrekt erkannt hat, dass er fehlt
+- Lösung: Fehlende Werte werden beim Abgleich übersprungen; die Prüfung auf fehlende Pflichtangaben folgt als eigene Regel.
+
+
+-> Arbeitsteilung zwischen KI und Code: Das Sprachmodell erkennt die Daten unabhängig vom Layout, der Code vereinheitlicht und kontrolliert sie. Erfundene oder veränderte Werte fallen auf, egal welches Modell verwendet wird.
+
+
+**Nächster Schritt:**
+Rechenlogik (Netto + USt = Brutto) und Pflichtangaben prüfen, damit fehlerhafte und unvollständige Rechnungen automatisch markiert werden.

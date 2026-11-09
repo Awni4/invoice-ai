@@ -22,6 +22,7 @@ SCHEMA = {
                  "iban", "netto", "ust_satz", "ust_betrag", "brutto"],
 }
 
+
 def frage_stellen(frage: str) -> str:
     """Schickt eine Frage an das Sprachmodell und gibt die Antwort als Text zurück."""
     antwort = ollama.chat(
@@ -29,6 +30,7 @@ def frage_stellen(frage: str) -> str:
         messages=[{"role": "user", "content": frage}],
     )
     return antwort["message"]["content"]
+
 
 def rechnungsdaten_auslesen(text: str) -> dict:
     """Lässt das Sprachmodell die Rechnungsdaten auslesen und gibt sie als Dictionary zurück."""
