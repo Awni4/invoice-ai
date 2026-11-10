@@ -99,3 +99,21 @@ Beim Vergleichen müssen beide Seiten gleich behandelt werden (z. B. Leerzeichen
 
 **Nächster Schritt:**
 Rechenlogik (Netto + USt = Brutto) und Pflichtangaben prüfen, damit fehlerhafte und unvollständige Rechnungen automatisch markiert werden.
+
+## Tag 5 – 10.11.2026
+**Erledigt:**
+Caching für die KI-Ergebnisse eingebaut: Jede Rechnung wird nur einmal von der KI ausgelesen, das Ergebnis landet als JSON in `output/cache/` -> Testläufe dauern danach nur noch wenige Sekunden statt mehrere Minuten.
+
+Neue Funktion `rechenlogik_pruefen`: kontrolliert, ob Netto + USt dem Bruttobetrag entspricht und ob der USt-Betrag zum USt-Satz passt, mit einer kleinen Rundungstoleranz.
+
+**Gelernt:**
+Gleitkommazahlen dürfen nie mit `==` verglichen werden, da schon einfache Rechnungen wie `0.1 + 0.2` nicht exakt `0.3` ergeben; Pfad-Attribute wie `stem` zum Umbau von Dateinamen.
+
+**Problem & Lösung:**
+- Problem: Die Rechenprüfung allein reicht nicht aus, um Rechnung 03 zu erkennen. Dort hat die KI den Bruttobetrag selbst auf 892,50 "korrigiert", wodurch Netto + USt wieder zusammenpasst.
+- Lösung: Die Rechenprüfung ersetzt nicht den Textabgleich aus Tag 4, sondern ergänzt ihn. Erst beide Prüfungen zusammen decken den Fehler auf.
+
+-> Zeigt, dass eine einzelne Prüfung nicht genug ist – erst mehrere unabhängige Prüfungen zusammen machen die KI-Ausgabe vertrauenswürdig.
+
+**Nächster Schritt:**
+Pflichtangaben prüfen (z. B. fehlende Rechnungsnummer bei Rechnung 04) und alle Prüfungen zu einem Gesamtstatus pro Rechnung zusammenführen, damit am Ende klar ist, welche Rechnung ohne Nacharbeit durchgeht.

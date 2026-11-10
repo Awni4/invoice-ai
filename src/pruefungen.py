@@ -1,5 +1,7 @@
 """Prüft und vereinheitlicht die vom Sprachmodell ausgelesenen Rechnungsdaten."""
 
+TOLERANZ = 0.01  # maximal erlaubte Rundungsdifferenz in Euro
+
 import re
 
 
@@ -45,3 +47,21 @@ def im_text_gefunden(feld: str, wert, text: str) -> bool:
 def werte_abgleichen(daten: dict, text: str) -> list[str]:
     """Gibt die Namen aller Felder zurück, deren Wert nicht im Text der Rechnung steht."""
     return [feld for feld, wert in daten.items() if not im_text_gefunden(feld, wert, text)]
+
+
+def rechenlogik_pruefen(daten: dict) -> list[str]:
+    """Prüft, ob Netto, USt-Satz, USt-Betrag und Brutto rechnerisch zusammenpassen."""
+    fehler = []
+    netto, ust_satz = daten["netto"], daten["ust_satz"]
+    ust_betrag, brutto = daten["ust_betrag"], daten["brutto"]
+
+    if None in (netto, ust_betrag, brutto):
+        return fehler  # fehlende Werte meldet die Pflichtangaben-Prüfung
+
+    if abs(netto + ust_betrag - brutto) > TOLERANZ:
+        fehler.append("Netto + USt ergibt nicht den Bruttobetrag")
+
+    if ust_satz is not None and abs(netto * ust_satz / 100 - ust_betrag) > TOLERANZ:
+        fehler.append("USt-Betrag passt nicht zum USt-Satz")
+
+    return fehler
